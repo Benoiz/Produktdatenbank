@@ -1,5 +1,7 @@
 import java.io.*;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
 
 public class FileToDataModel {
 
@@ -10,43 +12,97 @@ public class FileToDataModel {
     private static final String BUYERS_INI = "New_Entity: \"person_id\",\"product_id\"";
     private static final String MANUFACTURERS_PRODUCTS = "New_Entity: \"product_id\",\"company_id\"";
 
-    void fileToModel() throws IOException {
-
-        BufferedReader in = null;
-        try {
-            URL fileSource = new URL(Main.URL_STRING);
-            in = new BufferedReader(new InputStreamReader(fileSource.openStream()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-
-                /* Import persons data set
-                * the loop goes through every line in specified block and assigns value to object property*/
-                if (inputLine.equals(PERSONS_INI)) {
-                    while ((inputLine = in.readLine()) != PRODUCTS_INI) {
-                        String[] tokens = divideStr(inputLine);
-
-                    }
-                }
-                // Import products data set
-                if (inputLine.equals(PRODUCTS_INI)) {
-                    while ((inputLine = in.readLine()) != COMPANIES_INI) {
-
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            System.out.println("There probably was an I/O problem "); // bIg oOf
-            System.out.println(ex.getMessage());
-        } finally {
-            if (in != null) in.close();
-        }
-    }
 
     String[] divideStr (String inputString) {
 
-        inputString.replace("\"", "");
+        inputString.replaceAll("\"", "");
         inputString.trim();
         String[] result = inputString.split(",");
         return result;
     }
+
+    List<Persons> getPersons() throws IOException {
+        BufferedReader read = initiateFileReader();
+        String inputLine;
+        Persons p = new Persons();
+        List<Persons> PersonsList = new LinkedList<>();
+        while ((inputLine = read.readLine()) != null) {
+            if (inputLine.equals(PERSONS_INI)) {
+
+                while (!(inputLine = read.readLine()).equals(PRODUCTS_INI)) {
+                    String[] tokens = divideStr(inputLine);
+                    p.id = tokens[0];
+                    p.name = tokens[1];
+                    p.gender = tokens[2];
+                    PersonsList.add(p);
+                }
+            }
+        }
+        if (read != null)
+            read.close();
+        return PersonsList;
+    }
+
+    List<Products> getProducts() throws IOException {
+        BufferedReader read = initiateFileReader();
+        String inputLine;
+        Products p = new Products();
+        List<Products> ProductsList = new LinkedList<>();
+        while ((inputLine = read.readLine()) != null) {
+            if (inputLine.equals(PRODUCTS_INI)) {
+
+
+
+                while (!(inputLine = read.readLine()).equals(COMPANIES_INI)) {
+                    String[] tokens = divideStr(inputLine);
+                    p.id = tokens[0];
+                    p.name = tokens[1];
+                    ProductsList.add(p);
+                }
+            }
+        }
+        if (read != null)
+            read.close();
+
+        return ProductsList;
+    }
+
+    List<Companies> getCompanies() throws IOException {
+        BufferedReader read = initiateFileReader();
+        String inputLine;
+        Companies c = new Companies();
+        List<Companies> CompaniesList = new LinkedList<>();
+        while ((inputLine = read.readLine()) != null) {
+            if (inputLine.equals(COMPANIES_INI)) {
+
+
+
+                while( !(inputLine = read.readLine()).equals(FRIENDS_INI)) {
+                    String[] tokens = divideStr(inputLine);
+                    c.id = tokens[0];
+                    c.name = tokens[1];
+                    CompaniesList.add(c);
+                }
+            }
+        }
+        if (read != null)
+            read.close();
+
+        return CompaniesList;
+    }
+
+    BufferedReader initiateFileReader() {
+        BufferedReader in = null;
+        try {
+            //URL fileSource = new URL(Main.FILE_NAME);
+            in = new BufferedReader(new FileReader(Main.FILE_NAME));
+
+            return in;
+        } catch (Exception ex) {
+            System.out.println("There probably was an I/O problem "); // bIg oOf
+            System.out.println(ex.getMessage());
+            return in;
+        }
+    }
+
 }

@@ -1,7 +1,7 @@
 public abstract class BasicInfo {
-     int id;
-     int name;
-
-     abstract int getId();
-     abstract String getName();
+     String id;
+     String name;
+     /*
+     abstract String getId();
+     abstract String getName(); */
 }

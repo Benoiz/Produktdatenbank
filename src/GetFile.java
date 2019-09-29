@@ -19,7 +19,7 @@ public class GetFile {
                 out.println(inputLine);
             }
         } catch (Exception ex) {
-            System.out.println("There probably was a problem when reading or writing a file");
+            System.out.println("There probably was an IOException");
             System.out.println(ex.getMessage());
         } finally {
             if (in != null) {
