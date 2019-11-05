@@ -1,5 +1,3 @@
-import org.omg.CORBA.Environment;
-
 import java.io.*;
 import java.net.URL;
 

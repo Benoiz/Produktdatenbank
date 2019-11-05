@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -25,9 +26,13 @@ public class Main {
         }
         //read from local file and import data
         FileToDataModel fdm = new FileToDataModel();
-        List<Persons> PersonsList = fdm.getPersons();
-        List<Products> ProductsList = fdm.getProducts();
-        List<Companies> CompaniesList = fdm.getCompanies();
+        ArrayList<Persons> PersonsList = fdm.getPersons();
+        ArrayList<Products> ProductsList = fdm.getProducts();
+        ArrayList<Companies> CompaniesList = fdm.getCompanies();
+        ArrayList<Friends> FriendsList = fdm.getFriends();
+        ArrayList<Buyers> BuyersList = fdm.getBuyers();
+        ArrayList<ManuProdRelation> ManuProdList = fdm.getManufacturers();
+
 
         Results res = new Results();
         try {

@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,11 +22,11 @@ public class FileToDataModel {
         return result;
     }
 
-    List<Persons> getPersons() throws IOException {
+    ArrayList<Persons> getPersons() throws IOException {
         BufferedReader read = initiateFileReader();
         String inputLine;
         Persons p = new Persons();
-        List<Persons> PersonsList = new LinkedList<>();
+        ArrayList<Persons> PersonsList = new ArrayList<>();
         while ((inputLine = read.readLine()) != null) {
             if (inputLine.equals(PERSONS_INI)) {
 
@@ -43,15 +44,13 @@ public class FileToDataModel {
         return PersonsList;
     }
 
-    List<Products> getProducts() throws IOException {
+    ArrayList<Products> getProducts() throws IOException {
         BufferedReader read = initiateFileReader();
         String inputLine;
         Products p = new Products();
-        List<Products> ProductsList = new LinkedList<>();
+        ArrayList<Products> ProductsList = new ArrayList<>();
         while ((inputLine = read.readLine()) != null) {
             if (inputLine.equals(PRODUCTS_INI)) {
-
-
 
                 while (!(inputLine = read.readLine()).equals(COMPANIES_INI)) {
                     String[] tokens = divideStr(inputLine);
@@ -67,15 +66,13 @@ public class FileToDataModel {
         return ProductsList;
     }
 
-    List<Companies> getCompanies() throws IOException {
+    ArrayList<Companies> getCompanies() throws IOException {
         BufferedReader read = initiateFileReader();
         String inputLine;
         Companies c = new Companies();
-        List<Companies> CompaniesList = new LinkedList<>();
+        ArrayList<Companies> CompaniesList = new ArrayList<>();
         while ((inputLine = read.readLine()) != null) {
             if (inputLine.equals(COMPANIES_INI)) {
-
-
 
                 while( !(inputLine = read.readLine()).equals(FRIENDS_INI)) {
                     String[] tokens = divideStr(inputLine);
@@ -91,6 +88,69 @@ public class FileToDataModel {
         return CompaniesList;
     }
 
+    ArrayList<Friends> getFriends() throws IOException {
+        BufferedReader read = initiateFileReader();
+        String inputLine;
+        Friends f = new Friends();
+        ArrayList<Friends> Friendslist = new ArrayList<>();
+        while ((inputLine = read.readLine()) != null) {
+            if (inputLine.equals(FRIENDS_INI)) {
+
+                while (!(inputLine = read.readLine()).equals(BUYERS_INI)) {
+                    String[] tokens = divideStr(inputLine);
+                    f.id = tokens[0];
+                    f.id2 = tokens[1];
+                    Friendslist.add(f);
+                }
+            }
+        }
+        if (read != null)
+            read.close();
+
+        return Friendslist;
+    }
+
+    ArrayList<Buyers> getBuyers() throws IOException {
+        BufferedReader read = initiateFileReader();
+        String inputLine;
+        Buyers b = new Buyers();
+        ArrayList<Buyers> Buyerslist = new ArrayList<>();
+        while ((inputLine = read.readLine()) != null) {
+            if (inputLine.equals(BUYERS_INI)) {
+
+                while (!(inputLine = read.readLine()).equals(MANUFACTURERS_PRODUCTS)) {
+                    String[] tokens = divideStr(inputLine);
+                    b.id = tokens[0];
+                    b.productId = tokens[1];
+                    Buyerslist.add(b);
+                }
+            }
+        }
+        if (read != null)
+            read.close();
+
+        return Buyerslist;
+    }
+
+    ArrayList<ManuProdRelation> getManufacturers() throws IOException {
+        BufferedReader read = initiateFileReader();
+        String inputLine;
+        ManuProdRelation m = new ManuProdRelation();
+        ArrayList<ManuProdRelation> ManuProdList = new ArrayList<>();
+        while ((inputLine = read.readLine()) != null) {
+            if (inputLine.equals(MANUFACTURERS_PRODUCTS)) {
+
+                String[] tokens = divideStr(inputLine);
+                m.companyName = tokens[0];
+                m.productId = tokens[1];
+                ManuProdList.add(m);
+            }
+        }
+        if (read != null)
+            read.close();
+
+        return ManuProdList;
+    }
     BufferedReader initiateFileReader() {
         BufferedReader in = null;
         try {
