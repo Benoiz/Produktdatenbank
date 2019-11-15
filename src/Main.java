@@ -26,38 +26,29 @@ public class Main {
         }
         //read from local file and import data
         FileToDataModel fdm = new FileToDataModel();
-        ArrayList<Persons> PersonsList = fdm.getPersons();
-        ArrayList<Products> ProductsList = fdm.getProducts();
-        ArrayList<Companies> CompaniesList = fdm.getCompanies();
-        ArrayList<Friends> FriendsList = fdm.getFriends();
-        ArrayList<Buyers> BuyersList = fdm.getBuyers();
-        ArrayList<ManuProdRelation> ManuProdList = fdm.getManufacturers();
-
+        int output = fdm.getItems();
+        //System.out.println(output);
 
         Results res = new Results();
         try {
-            String request[] = args[0].split("=");              // processing commandline args
+            String[] request = args[0].split("=");              // processing commandline args
             String requestValue = request[1];
 
             if(request[0].equals("--personensuche")) { // argument is name
-                res.getPersonbyName(PersonsList, requestValue);
-            }
-            if(request[0].equals("--produktsuche")) { // argument is name
-                res.getProductbyName(ProductsList, requestValue);
-            }
-            if(request[0].equals("--produktnetzwerk")) { // argument is id
+                res.getPersonByName(FileToDataModel.PersonsList, requestValue);
+            } else if (request[0].equals("--produktsuche")) { // argument is name
+                res.getProductByName(FileToDataModel.ProductsList, requestValue);
+            } else if (request[0].equals("--produktnetzwerk")) { // argument is id
                 //not yet
                 System.out.println("not implemented yet");
-            }
-            if(request[0].equals("--firmennetzwerk")) { // argument is id
+            } else if (request[0].equals("--firmennetzwerk")) { // argument is id
                 //not yet
                 System.out.println("not implemented yet");
-            }
-            else {
+            } else {
                 System.out.println("could not find " + args[0]);
             }
         } catch (Exception ex) {
-            System.out.println("no argument given?");
+            System.out.println("no argument given? " + ex);
         }
 
 

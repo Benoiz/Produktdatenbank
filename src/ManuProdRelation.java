@@ -1,6 +1,6 @@
 public class ManuProdRelation {
 
-    String companyName;
+    String companyId;
     String productId;
 }
 
