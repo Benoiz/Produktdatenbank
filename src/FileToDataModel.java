@@ -1,3 +1,5 @@
+import org.jetbrains.annotations.NotNull;
+
 import java.io.*;
 import java.net.URL;
 import java.util.*;
@@ -18,11 +20,11 @@ public class FileToDataModel {
     public static ArrayList<Buyers> BuyersList = new ArrayList<>();
     public static ArrayList<ManuProdRelation> ManuProdList = new ArrayList<>();
 
-    String[] divideStr (String inputString) {
+    String[] divideStr(@NotNull String inputString) {
 
-        inputString.replaceAll("\"", "");
         inputString.trim();
         String[] result = inputString.split(",");
+
         return result;
     }
 
@@ -57,44 +59,50 @@ public class FileToDataModel {
             switch (switchCount) {
                 case 1: // processing persons
                     p = new Person();
-                    p.id = tokens[0];
-                    p.name = tokens[1];
-                    p.gender = tokens[2];
+                    p.id = formatString(tokens[0]);
+                    p.name = formatString(tokens[1]);
+                    p.gender = formatString(tokens[2]);
                     PersonsList.add(p);
                     break;
                 case 2:
                     pr = new Product();
-                    pr.id = tokens[0];
-                    pr.name = tokens[1];
+                    pr.id = formatString(tokens[0]);
+                    pr.name = formatString(tokens[1]);
                     ProductsList.add(pr);
                     break;
                 case 3:
                     c = new Company();
-                    c.id = tokens[0];
-                    c.name = tokens[1];
+                    c.id = formatString(tokens[0]);
+                    c.name = formatString(tokens[1]);
                     CompaniesList.add(c);
                     break;
                 case 4:
                     f = new Friends();
-                    f.id = tokens[0];
-                    f.id2 = tokens[1];
+                    f.id = formatString(tokens[0]);
+                    f.id2 = formatString(tokens[1]);
                     FriendsList.add(f);
                     break;
                 case 5:
                     b = new Buyers();
-                    b.id = tokens[0];
-                    b.productId = tokens[1];
+                    b.id = formatString(tokens[0]);
+                    b.productId = formatString(tokens[1]);
                     BuyersList.add(b);
                     break;
                 case 6:
                     mpr = new ManuProdRelation();
-                    mpr.productId = tokens[0];
-                    mpr.companyId = tokens[1];
+                    mpr.productId = formatString(tokens[0]);
+                    mpr.companyId = formatString(tokens[1]);
                     ManuProdList.add(mpr);
                     break;
-                }
+            }
         }
-
+        // remove first element of each list because it is the declaring line ... see constants above
+        PersonsList.remove(0);
+        ProductsList.remove(0);
+        CompaniesList.remove(0);
+        FriendsList.remove(0);
+        BuyersList.remove(0);
+        ManuProdList.remove(0);
         if (read != null)
             read.close();
         return 0;
@@ -114,4 +122,8 @@ public class FileToDataModel {
         }
     }
 
+    String formatString(@NotNull String arg) {      // removing unnecessary quotation marks and white spaces
+        String formattedString = arg.replaceAll("^\"|\"$", "");
+        return formattedString.trim();
+    }
 }
