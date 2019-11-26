@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+
 
 public class Main {
 
@@ -20,23 +20,29 @@ public class Main {
         }
         //read from local file and import data
         FileToDataModel fdm = new FileToDataModel();
-        int output = fdm.getItems();
+        fdm.getItems();
 
         Results res = new Results();
         try {
             String[] request = args[0].split("=");              // processing commandline args
             String requestValue = request[1];
 
-            if (request[0].equals("--personensuche")) { // argument is name
-                ArrayList<String> result = res.getPersonByName(FileToDataModel.PersonsList, requestValue);
-            } else if (request[0].equals("--produktsuche")) { // argument is name
-                res.getProductByName(FileToDataModel.ProductsList, requestValue);
-            } else if (request[0].equals("--produktnetzwerk")) { // argument is id
-                res.printFromCollection(res.getProductNetwork(requestValue));
-            } else if (request[0].equals("--firmennetzwerk")) { // argument is id
-                //not yet
-            } else {
-                System.out.println("could not find " + args[0]);
+            switch (request[0]) {
+                case "--personensuche":  // argument is name
+                    res.getPersonByName(FileToDataModel.PersonsList, requestValue);
+                    break;
+                case "--produktsuche":  // argument is name
+                    res.getProductByName(FileToDataModel.ProductsList, requestValue);
+                    break;
+                case "--produktnetzwerk":  // argument is id
+                    res.printProductNetwork(FileToDataModel.ProductsList, res.getProductNetwork(requestValue));
+                    break;
+                case "--firmennetzwerk":  // argument is id
+                    res.printCompanyNetwork(res.getCompanyNetwork(requestValue));
+                    break;
+                default:
+                    System.out.println("could not find " + args[0]);
+                    break;
             }
         } catch (Exception ex) {
             System.out.println("no argument given? " + ex);

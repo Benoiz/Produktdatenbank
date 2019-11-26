@@ -6,32 +6,30 @@ import java.util.TreeSet;
 
 class Results {
 
-    ArrayList<String> getPersonByName(@NotNull ArrayList<Person> list, String personName) {
-        ArrayList<String> PersonsList = new ArrayList<>();
+    void getPersonByName(@NotNull ArrayList<Person> list, String personName) {
         for (Person p : list) {
             boolean match = containsIgnoreCase(p.name, personName);
-            if (match) PersonsList.add(p.name);
-        }
-
-        return PersonsList;
-    }
-
-    ArrayList<String> getProductByName(@NotNull ArrayList<Product> list, String productName) {
-        ArrayList<String> ProductList = new ArrayList<>();
-        for (Product p : list) {
-            boolean match = containsIgnoreCase(p.name, productName);
-            if (match) ProductList.add(p.name);
-        }
-        return ProductList;
-    }
-
-    private void getProductById(@NotNull Collection<Product> list, String productId) {
-        for (Product p : list) {
-            boolean match = containsIgnoreCase(p.id, productId);
             if (match) System.out.println(p.name);
         }
     }
 
+    void getProductByName(@NotNull ArrayList<Product> list, String productName) {
+        for (Product p : list) {
+            boolean match = containsIgnoreCase(p.name, productName);
+            if (match) System.out.println(p.name);
+        }
+    }
+
+    void printProductNetwork(@NotNull Collection<Product> list, @NotNull TreeSet<String> products) {
+        for (String s : products) {
+            for (Product p : list) {
+                boolean match = containsIgnoreCase(p.id, s);
+                if (match) System.out.println(p.name);
+            }
+        }
+    }
+
+    @NotNull
     private ArrayList<String> getFriendsById(String personId) {
         ArrayList<String> list = new ArrayList<>();
         for (Friends f : FileToDataModel.FriendsList) {
@@ -44,6 +42,7 @@ class Results {
         return list;
     }
 
+    @NotNull
     private ArrayList<String> getBoughtProductsById(String personId) { // a persons id
         ArrayList<String> list = new ArrayList<>();
         for (Buyers b : FileToDataModel.BuyersList) {
@@ -55,26 +54,24 @@ class Results {
         return list;
     }
 
-    ArrayList<String> getCompaniesById(String companyId) {
-        ArrayList<String> list = new ArrayList<>();
+    private void getCompanyById(String companyId) {
         for (Company c : FileToDataModel.CompaniesList) {
             boolean match = containsIgnoreCase(c.id, companyId);
             if (match) {
-                list.add(c.name);
+                System.out.println(c.name);
             }
         }
-        return list;
     }
 
-    ArrayList<String> getCompanyIdByProductId(String productId) {
-        ArrayList<String> list = new ArrayList<>();
+    private String getCompanyIdByProductId(String productId) {
+        String result = null;
         for (ManuProdRelation mpr : FileToDataModel.ManuProdList) {
             boolean match = containsIgnoreCase(mpr.productId, productId);
             if (match) {
-                list.add(mpr.companyId);
+                result = mpr.companyId;
             }
         }
-        return list;
+        return result;
     }
 
     TreeSet<String> getProductNetwork(String personId) {
@@ -92,22 +89,23 @@ class Results {
         return ts;
     }
 
-    void printFromCollection(Collection<String> collection) {
-        for (String s : collection) {
-            getProductById(FileToDataModel.ProductsList, s);
-        }
-    }
-
     TreeSet<String> getCompanyNetwork(String id) {
+        ArrayList<String> tempList = new ArrayList<>();
         TreeSet<String> resultSet = new TreeSet<>();
         TreeSet<String> tempSet = getProductNetwork(id);
         for (String s : tempSet) {
-
+            tempList.add(getCompanyIdByProductId(s));
         }
+        resultSet.addAll(tempList);
 
         return resultSet;
     }
 
+    void printCompanyNetwork(@NotNull TreeSet<String> companySet) {
+        for (String elem : companySet) {
+            getCompanyById(elem);
+        }
+    }
     // generic function which hast to be implemented yet
     /* <T, E> ArrayList<T> sampleGetSomething(@NotNull ArrayList<E> list, Object member, Object searchVar) {
         ArrayList<T> resultList = new ArrayList<>();
